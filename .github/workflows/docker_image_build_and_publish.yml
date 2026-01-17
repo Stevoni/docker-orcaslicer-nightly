@@ -56,8 +56,18 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          # Use DockerfileNightly for scheduled/manual runs, otherwise use Dockerfile
-          file: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && './DockerfileNightly' || './Dockerfile' }}
+          # Use selection logic: 
+          # 1. If manual and not 'auto', use selection.
+          # 2. If scheduled, use DockerfileNightly.
+          # 3. If manual 'auto' and a Tag, use Dockerfile.
+          # 4. Otherwise default to Dockerfile.
+          file: >-
+            ${{ 
+              (github.event_name == 'workflow_dispatch' && github.event.inputs.dockerfile != 'auto') && github.event.inputs.dockerfile || 
+              (github.event_name == 'schedule' && './DockerfileNightly') || 
+              (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags/') && './Dockerfile') ||
+              './Dockerfile'
+            }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
