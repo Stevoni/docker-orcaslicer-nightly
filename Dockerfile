@@ -6,8 +6,12 @@ FROM ghcr.io/linuxserver/baseimage-selkies:ubuntunoble
 ARG BUILD_DATE
 ARG VERSION
 ARG ORCASLICER_VERSION
-LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
-LABEL maintainer="thelamer"
+LABEL build_version="Linuxserver.io based version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="Stevoni"
+LABEL org.opencontainers.image.source="https://github.com/stevoni/docker-orcaslicer-nightly"
+# The docker-orcaslicer maintainer
+# LABEL maintainer="thelamer"
+
 
 # title
 ENV TITLE=OrcaSlicer \
